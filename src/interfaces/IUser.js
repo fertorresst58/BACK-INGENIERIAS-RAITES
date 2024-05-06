@@ -7,7 +7,7 @@ class IUser {
     @throws {error} SI HAY UN ERROR EN LA CREACION
   */
 
-  static async createUser (nombre, apaterno, amaterno, direccion, telefono, email, password) {}
+  static async createUser (nombre, apaterno, amaterno, sexo, email, password, telefono, carrera, fechaNac) {}
   static async findByEmail (email) {}
   async verifyPassword (password) {}
   // static async getAllUser () {}

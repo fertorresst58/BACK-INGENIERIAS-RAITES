@@ -1,20 +1,35 @@
-const admin = require('mysql')
+const mysql = require('mysql');
+const { promisify } = require('util');
 
-const con = admin.createConnection({
-  host: 'localhost',
-  database: 'raitesug',
-  user: 'raitesUG',
-  password: '123456'
-})
+// Promisify es un módulo para manejo de promesas (operaciones asíncronas)
 
-con.connect((error) => {
-  if (error) {
-    throw error
-  } else {
-    console.log('DB CONECTADA')
+// Configurar la conexión a la base de datos
+const connection = mysql.createPool(
+  {
+    host: 'localhost',
+    user: 'raitesUG',
+    password: '123456',
+    database: 'raitesug'
   }
-})
+)
 
-con.end()
+connection.getConnection ((err, conn) => {
+    if (err)
+      console.log('ERROR AL CONECTAR DB => ', err)
 
-module.exports = admin
+    if (conn)
+      console.log('DB CONECTADA')
+
+    return
+  }
+)
+
+connection.query = promisify(connection.query)
+
+// El objeto query se refiere a cualquier operación que hagamos sobre la basse de datos
+// INSERT, DELETE, UPDATE, SELECT
+
+// Al envolverlo sobre promisify, indica que esas operacones son promesas.
+
+// Exporta el objeto connection para usarlo desde otros archivos de código.
+module.exports = connection

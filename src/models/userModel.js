@@ -1,39 +1,45 @@
-const admin = require('../config/mysql')
+const con = require('../config/mysql')
 const IUser = require('../interfaces/IUser')
 const bcrypt = require('bcrypt')
 
 class User extends IUser {
-	constructor(nombre, apaterno, amaterno, direccion, telefono, email, password) {
+	constructor(id, nombre, apaterno, amaterno, sexo, email, password, telefono, carrera, fechaNac) {
 		super()
+		this.id = id
 		this.nombre = nombre
 		this.aparteno = apaterno
 		this.amaterno = amaterno
-		this.direccion = direccion
-		this.telefono = telefono
+		this.sexo = sexo
 		this.email = email
 		this.password = password
+		this.telefono = telefono
+		this.carrera = carrera
+		this.fechaNac = fechaNac
 	}
 
-	static async createUser(nombre, apaterno, amaterno, direccion, telefono, email, password) {
+	static async createUser(nombre, apaterno, amaterno, sexo, email, password, telefono, carrera, fechaNac) {
 		try {
 			const hash = await bcrypt.hash(password, 10)
-			const user = firestore.collection('users').doc(email)
+			const query = 'INSERT INTO `usuarios` ' + 
+			'(usu_nombre, usu_apaterno, usu_amaterno, usu_sexo, usu_email, usu_password, usu_telefono, usu_carrera, usu_fecha_nac) ' + 
+			'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+      await con.query(query, [
+				nombre,
+				apaterno,
+				amaterno,
+				sexo,
+				email,
+				hash,
+				telefono,
+				carrera,
+				fechaNac
+			])
 
-			await user.set({
-					nombre,
-					apaterno,
-					amaterno,
-					direccion,
-					telefono,
-					email, 
-					password: hash
-			})
-
-			return new User(nombre, apaterno, amaterno, direccion, telefono, email, password)
+			return new User(nombre, apaterno, amaterno, sexo, email, password, telefono, carrera, fechaNac)
 		} 
 		catch (err) {
 			console.log('ERROR =>', err)
-			throw new Error('Error creating user')
+			throw new Error('ERROR AL REGISTRAR AL NUEVO USUARIO')
 		}
 	}
 
@@ -43,12 +49,23 @@ class User extends IUser {
 
 	static async findByEmail (email) {
 		try {
-			const user = firestore.collection('users').doc(email)
-			const userDoc = await user.get()
+      const query = 'SELECT * FROM usuarios WHERE usu_email = ?'
+      const userDoc = await con.query(query, [email])
 
-			if (userDoc.exists) {
-				const userData = userDoc.data()
-				return new User (userData.nombre, userData.apaterno, userData.amaterno, userData.direccion, userData.telefono, userData.email, userData.password)
+			if (userDoc.length > 0) {
+				const newUser = new User (
+					userDoc[0].usu_id,
+					userDoc[0].usu_nombre,
+					userDoc[0].usu_apaterno,
+					userDoc[0].usu_amaterno,
+					userDoc[0].usu_sexo,
+					userDoc[0].usu_email,
+					userDoc[0].usu_password,
+					userDoc[0].usu_telefono,
+					userDoc[0].usu_carrera,
+					userDoc[0].usu_fecha_nac,
+				)
+				return newUser
 			}
 			return null
 		} 

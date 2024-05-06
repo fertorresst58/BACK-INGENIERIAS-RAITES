@@ -1,32 +1,35 @@
 const jwt = require('jsonwebtoken')
-const User = require('../models/User')
+const User = require('../models/userModel')
+require('dotenv').config()
 
 const login = async (req, res) => {
   try {
     const { email, password } = req.body
     
     // BUSCAMOS EL USUARIO PARA VERIFICAR QUE EXISTE EL CORREO ELECTRONICO
-    // AHORA CON FIREBASE-ADMIN SOLO LO PONEMOS ASI
     const userDoc = await User.findByEmail(email)
   
     // SI NO EXISTE EL USUARIO
     if (!userDoc) {
       return res.status(404).json({
-        message: 'User not found'
+        message: 'USUARIO NO ENCONTRADO'
       })
     }
 
     // VERIFICAMOS SI EL PASSWORD ES CORRECTO
     const isValidPass = await userDoc.verifyPassword(password)
-    
     if(!isValidPass) {
       return res.status(401).json({
-        message: 'Invalid Credentials'
+        message: 'CREDENCIALES INVALIDAS'
       })
     }
 
     // GENERAR EL TOKEN
-    const token = jwt.sign({ email: userDoc.email }, process.env.SECRET, { expiresIn: '1h' })
+    const token = jwt.sign(
+      { email: userDoc.email },
+      process.env.SECRET,
+      { expiresIn: '1h' })
+
     res.status(200).json({ 
       message: 'success',
       token
@@ -40,17 +43,18 @@ const login = async (req, res) => {
 
 const signUp = async (req, res) => {
   try {
-    const { nombre, apaterno, amaterno, direccion, telefono, email, password } = req.body
-    const existingUser = await User.findByEmail(email)
-    if (existingUser) {
+    const { nombre, apaterno, amaterno, sexo, email, password, telefono, carrera, fechaNac } = req.body
+    
+    const existingEmail = await User.findByEmail(email)
+    if (existingEmail) {
       return res.status(400).json({
-        message: 'User already exists'
+        message: 'EMAIL YA ESTA REGISTRADO'
       })
     }
 
-    const newUser = await User.createUser(nombre, apaterno, amaterno, direccion, telefono, email, password)
+    const newUser = await User.createUser(nombre, apaterno, amaterno, sexo, email, password, telefono, carrera, fechaNac)
     res.status(201).json({
-      message: 'User registered successfully',
+      message: 'USUARIO REGISTRADO SATISFACTORIAMENTE',
       user: newUser
     })
   } catch (error) {
