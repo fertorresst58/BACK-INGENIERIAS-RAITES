@@ -3,11 +3,11 @@ const IUser = require('../interfaces/IUser')
 const bcrypt = require('bcrypt')
 
 class User extends IUser {
-	constructor(id, nombre, apaterno, amaterno, sexo, email, password, telefono, carrera, fechaNac) {
+	constructor(id, nombre, apaterno, amaterno, sexo, email, password, telefono, carrera, fechaNac, des, img, ciudad, campus) {
 		super()
 		this.id = id
 		this.nombre = nombre
-		this.aparteno = apaterno
+		this.apaterno = apaterno
 		this.amaterno = amaterno
 		this.sexo = sexo
 		this.email = email
@@ -15,6 +15,10 @@ class User extends IUser {
 		this.telefono = telefono
 		this.carrera = carrera
 		this.fechaNac = fechaNac
+		this.des = des
+		this.img = img
+		this.ciudad = ciudad
+		this.campus = campus
 	}
 
 	static async createUser(nombre, apaterno, amaterno, sexo, email, password, telefono, carrera, fechaNac) {
@@ -64,6 +68,10 @@ class User extends IUser {
 					userDoc[0].usu_telefono,
 					userDoc[0].usu_carrera,
 					userDoc[0].usu_fecha_nac,
+					userDoc[0].usu_des,
+					userDoc[0].usu_img,
+					userDoc[0].usu_ciudad,
+					userDoc[0].usu_campus
 				)
 				return newUser
 			}
@@ -71,7 +79,7 @@ class User extends IUser {
 		} 
 		catch(err) {
 			console.log('Error => ', err)
-			throw new Error('Error finding user')
+			throw new Error('NO SE ENCONTRO AL USUARIO')
 		}
 	}
 
