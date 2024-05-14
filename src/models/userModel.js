@@ -47,7 +47,7 @@ class User extends IUser {
 		return await bcrypt.compare(password, this.password)
 	}
 
-	static async findByEmail (email) {
+	static async findUser (email) {
 		try {
       const query = 'SELECT * FROM usuarios WHERE usu_email = ?'
       const userDoc = await con.query(query, [email])
@@ -72,6 +72,23 @@ class User extends IUser {
 		catch(err) {
 			console.log('Error => ', err)
 			throw new Error('Error finding user')
+		}
+	}
+
+	static async logoutUser(token, callback) {
+		// Verifica si el token es válido
+		try {
+			const decodedToken = jwt.verify(token, process.env.SECRET)
+			// Token válido, el usuario está autenticado
+			// No se requiere realizar ninguna acción específica en el backend para logout,
+			// ya que el token será invalidado automáticamente en el cliente
+			callback(null)
+		} catch (err) {
+			// Error al verificar el token, el token es inválido o ha expirado
+			callback({ 
+				error: 'Token inválido',
+				success: false
+			})
 		}
 	}
 	

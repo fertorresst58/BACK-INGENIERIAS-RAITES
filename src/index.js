@@ -9,7 +9,7 @@ const app = express()
 // MIDDLEWARE
 app.use(cors())
 app.use(express.json())
-app.use('/', routes)
+app.use('/api/auth', routes)
 
 const PORT = process.env.PORT || 5010
 
