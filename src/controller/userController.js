@@ -120,7 +120,7 @@ const signUp = async (req, res) => {
   try {
     const { nombre, apaterno, amaterno, sexo, email, password, telefono, carrera, fechaNac } = req.body
     
-    const existingEmail = await User.findByEmail(email)
+    const existingEmail = await User.findUser(email)
     if (existingEmail) {
       return res.status(400).json({
         message: 'EMAIL YA ESTA REGISTRADO',
