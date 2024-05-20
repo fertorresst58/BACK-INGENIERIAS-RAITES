@@ -22,12 +22,13 @@ class User extends IUser {
 	}
 
 	static async createUser(nombre, apaterno, amaterno, sexo, email, password, telefono, carrera, fechaNac) {
+		console.log("Hola");
 		try {
 			const hash = await bcrypt.hash(password, 10)
 			const query = 'INSERT INTO `usuarios` ' + 
 			'(usu_nombre, usu_apaterno, usu_amaterno, usu_sexo, usu_email, usu_password, usu_telefono, usu_carrera, usu_fecha_nac) ' + 
 			'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
-      await con.query(query, [
+      		await con.query(query, [
 				nombre,
 				apaterno,
 				amaterno,
