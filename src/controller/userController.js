@@ -120,6 +120,7 @@ const signUp = async (req, res) => {
   try {
     const { nombre, apaterno, amaterno, sexo, email, password, telefono, carrera, fechaNac } = req.body
     
+<<<<<<< HEAD
     // const existingEmail = await User.findByEmail(email)
     // if (existingEmail) {
     //   return res.status(400).json({
@@ -127,6 +128,15 @@ const signUp = async (req, res) => {
     //     success: false
     //   })
     // }
+=======
+    const existingEmail = await User.findUser(email)
+    if (existingEmail) {
+      return res.status(400).json({
+        message: 'EMAIL YA ESTA REGISTRADO',
+        success: false
+      })
+    }
+>>>>>>> 3b24ef376895cba273a3d168ac8f9309ca6a7deb
 
     const newUser = await User.createUser(nombre, apaterno, amaterno, sexo, email, password, telefono, carrera, fechaNac)
     res.status(201).json({
