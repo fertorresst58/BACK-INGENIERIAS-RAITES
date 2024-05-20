@@ -10,8 +10,10 @@ const home = async (req, res) => {
           })
     }
 
-    arrayViajesPublicados = await viajes.allViajesPublicados(10)
-    arrayViajesReservados = await viajes.allViajesReservados(10)
+    const id = req.body.id
+
+    arrayViajesPublicados = await viajes.allViajesPublicados(id)
+    arrayViajesReservados = await viajes.allViajesReservados(id)
 
     if(arrayViajesPublicados && arrayViajesReservados){
         return res.status(200).json({
