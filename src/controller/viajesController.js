@@ -10,7 +10,7 @@ const home = async (req, res) => {
           })
     }
 
-    const id = req.body.id
+    const id = req.query.id
 
     arrayViajesPublicados = await viajes.allViajesPublicados(id)
     arrayViajesReservados = await viajes.allViajesReservados(id)

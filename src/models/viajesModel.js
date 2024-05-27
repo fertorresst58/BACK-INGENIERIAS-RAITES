@@ -56,7 +56,7 @@ class viajes {
 
     static async allViajesPublicados(usu_id) {
         try {
-            const query = 'SELECT viajes.* FROM usuarios INNER JOIN publicar ON ? = pub_usu_id INNER JOIN viajes ON pub_via_id = via_id'
+            const query = 'SELECT viajes.* FROM usuarios INNER JOIN publicar ON usu_id = pub_usu_id INNER JOIN viajes ON pub_via_id = via_id WHERE usu_id = ?'
 
             const allViajesReservados = await con.query(query, [usu_id])
 
@@ -83,10 +83,9 @@ class viajes {
 
     static async allViajesReservados(usu_id) {
         try {
-            const query = 'SELECT viajes.* FROM usuarios INNER JOIN reservar ON ? = res_usu_id INNER JOIN viajes ON res_via_id = via_id'
+            const query = 'SELECT viajes.* FROM usuarios INNER JOIN reservar ON usu_id = res_usu_id INNER JOIN viajes ON res_via_id = via_id WHERE usu_id = ?'
 
             const allViajesPublicados = await con.query(query, [usu_id])
-
             let arrayViajesPublicadoss = Array()
 
             allViajesPublicados.forEach(viaje => {
