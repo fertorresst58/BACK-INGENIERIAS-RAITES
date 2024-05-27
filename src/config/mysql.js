@@ -8,7 +8,7 @@ const connection = mysql.createPool(
   {
     host: 'localhost',
     user: 'root',
-    password: '12345',
+    password: 'password564',
     database: 'raitesug'
   }
 )
