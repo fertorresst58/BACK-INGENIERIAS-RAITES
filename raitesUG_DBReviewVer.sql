@@ -158,3 +158,5 @@ VALUES ('Desc1', 'Ini1' ,'Des1', '2023-06-09', '10:00:00', '166.66'),
 
 INSERT INTO reservar (res_usu_id, res_via_id)
 VALUES (11, 11), (11, 12), (11, 13);
+
+DELETE FROM resenas WHERE res_usu_id = 11;

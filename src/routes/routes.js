@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const { signUp, login, logout, user } = require('./../controller/userController')
 const { home } = require('./../controller/viajesController')
-const { addNewReview } = require('./../controller/reviewController')
+const { addNewReview, review } = require('./../controller/reviewController')
 // const authenticateToken = require('./../auth/authMiddleware')
 
 // RUTAS DE AUTENTICACION IMPLEMENTADAS EN FRONT
@@ -18,5 +18,6 @@ router.post('/signup', signUp)
 router.get('/home', home)
 
 router.post('/history', addNewReview)
+router.post('/history/findReview', review)
 
 module.exports = router

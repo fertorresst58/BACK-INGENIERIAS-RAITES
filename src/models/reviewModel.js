@@ -33,6 +33,30 @@ class Review extends IReview{
 			throw new Error('ERROR AL REGISTRAR LA NUEVA RESENIA')
 		}
 	}
+
+	static async findReview (viaje, usuario) {
+		try {
+      const query = 'SELECT * FROM resenas WHERE res_via_id = ? AND res_usu_id = ?'
+      const reviewDoc = await con.query(query, [viaje, usuario])
+
+			if (reviewDoc.length > 0) {
+				const newReview = new Review (
+					reviewDoc[0].res_id,
+					reviewDoc[0].res_via_id,
+					reviewDoc[0].res_usu_id,
+					reviewDoc[0].res_puntuacion,
+					reviewDoc[0].res_comentario,
+					reviewDoc[0].res_fecha,
+				)
+				return newReview
+			} else {
+				return null;
+			}
+		} 
+		catch(err) {
+			return null;
+		}
+	}
 }
 
 module.exports = Review
