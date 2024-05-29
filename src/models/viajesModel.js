@@ -7,7 +7,7 @@ class viajes {
         this.descripcion = descripcion
         this.inicio = inicio
         this.destino = destino
-        this.fecha = fecha.toISOString().slice(0, 10)
+        this.fecha = fecha
         this.hora = hora
         this.precio = precio
         this.capacidad = capacidad
@@ -27,6 +27,39 @@ class viajes {
                     );
     }
 
+    async createViaje() {
+        try {
+            const query = 'INSERT INTO viajes (via_descripcion, via_inicio, via_destino, via_fecha, via_hora, via_precio, via_capacidad, via_disponible) ' +
+            'VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
+
+            await con.query(query, [
+                this.descripcion,
+                this.inicio,
+                this.destino,
+                this.fecha,
+                this.hora,
+                this.precio,
+                this.capacidad,
+                this.disponible
+            ])
+        } catch (error) {
+            console.log('ERROR =>', error)
+        }
+    }
+
+    async findViajeParaAsignar(){
+        try {
+            const query = 'SELECT via_id FROM viajes WHERE via_descripcion = ? AND via_fecha = ? AND via_hora = ?'
+
+            const resultado = await con.query(query, [this.descripcion, this.fecha, this.hora])
+            const { via_id } = resultado[0]
+            this.id = via_id
+
+        } catch (error) {
+            console.log('ERROR AL ENCONTRAR EL VIAJE =>', error);
+        }
+    }
+
     static async allViajes() {
         try {
             const query = 'SELECT * FROM viajes'
@@ -40,7 +73,7 @@ class viajes {
                                     viaje.via_descripcion,
                                     viaje.via_inicio,
                                     viaje.via_destino,
-                                    viaje.via_fecha,
+                                    viaje.via_fecha.toISOString().slice(0, 10),
                                     viaje.via_hora,
                                     viaje.via_precio,
                                     viaje.via_capacidad,
@@ -67,7 +100,7 @@ class viajes {
                                     viaje.via_descripcion,
                                     viaje.via_inicio,
                                     viaje.via_destino,
-                                    viaje.via_fecha,
+                                    viaje.via_fecha.toISOString().slice(0, 10),
                                     viaje.via_hora,
                                     viaje.via_precio,
                                     viaje.via_capacidad,
@@ -93,7 +126,7 @@ class viajes {
                                     viaje.via_descripcion,
                                     viaje.via_inicio,
                                     viaje.via_destino,
-                                    viaje.via_fecha,
+                                    viaje.via_fecha.toISOString().slice(0, 10),
                                     viaje.via_hora,
                                     viaje.via_precio,
                                     viaje.via_capacidad,

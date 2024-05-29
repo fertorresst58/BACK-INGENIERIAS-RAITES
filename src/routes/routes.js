@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const { signUp, login, logout, user } = require('./../controller/userController')
-const { home } = require('./../controller/viajesController')
+const { home, registrarViaje } = require('./../controller/viajesController')
 const { addNewReview, review } = require('./../controller/reviewController')
 // const authenticateToken = require('./../auth/authMiddleware')
 
@@ -16,6 +16,8 @@ router.post('/signup', signUp)
 // router.put('/users/:email', authenticateToken, updateUser)
 
 router.get('/home', home)
+
+router.post('/registrarviaje', registrarViaje)
 
 router.post('/history', addNewReview)
 router.post('/history/findReview', review)

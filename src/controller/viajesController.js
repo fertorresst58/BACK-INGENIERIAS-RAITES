@@ -1,4 +1,5 @@
 const viajes = require('../models/viajesModel')
+const publicar = require('../models/publicarModel')
 
 const home = async (req, res) => {
     arrayViajes = await viajes.allViajes()
@@ -23,7 +24,34 @@ const home = async (req, res) => {
             viajesReservados: arrayViajesReservados
           })
     }
-    
 }
 
-module.exports = { home }
+const registrarViaje = async (req, res) => {
+    try {
+        const {descripcion, inicio, destino, fecha, hora, precio, capacidad } = req.query
+        const { id } = req.query
+
+        const viaje = new viajes(null, descripcion, inicio, destino, fecha, hora, parseInt(precio), parseInt(capacidad), null)
+        
+        await viaje.createViaje()
+
+        await viaje.findViajeParaAsignar()
+
+        const p = await publicar.createPublicar(id, viaje.id)
+
+        if (p) {
+            res.status(201).json({
+                message: 'VIAJE PUBLICADO SATISFACTORIAMENTE',
+                success: true
+            })
+        }
+        
+    } catch (error) {
+        res.status(500).json({
+            message: 'Internal Server Error',
+            success: false
+        })
+    }
+}
+
+module.exports = { home, registrarViaje }
