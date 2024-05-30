@@ -28,8 +28,8 @@ const home = async (req, res) => {
 
 const registrarViaje = async (req, res) => {
     try {
-        const {descripcion, inicio, destino, fecha, hora, precio, capacidad } = req.query
-        const { id } = req.query
+        const {descripcion, inicio, destino, fecha, hora, precio, capacidad } = req.body
+        const { id } = req.body
 
         const viaje = new viajes(null, descripcion, inicio, destino, fecha, hora, parseInt(precio), parseInt(capacidad), null)
         
