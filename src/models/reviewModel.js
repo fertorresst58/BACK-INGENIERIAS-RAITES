@@ -36,8 +36,8 @@ class Review extends IReview{
 
 	static async findReview (viaje, usuario) {
 		try {
-      const query = 'SELECT * FROM resenas WHERE res_via_id = ? AND res_usu_id = ?'
-      const reviewDoc = await con.query(query, [viaje, usuario])
+			const query = 'SELECT * FROM resenas WHERE res_via_id = ? AND res_usu_id = ?'
+			const reviewDoc = await con.query(query, [viaje, usuario])
 
 			if (reviewDoc.length > 0) {
 				const newReview = new Review (
@@ -46,7 +46,7 @@ class Review extends IReview{
 					reviewDoc[0].res_usu_id,
 					reviewDoc[0].res_puntuacion,
 					reviewDoc[0].res_comentario,
-					reviewDoc[0].res_fecha,
+					reviewDoc[0].res_fecha
 				)
 				return newReview
 			} else {

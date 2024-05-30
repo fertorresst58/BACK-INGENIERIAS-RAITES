@@ -24,10 +24,7 @@ const review = async (req, res) => {
     try {
       const { viaje, usuario } = req.body
       
-      // BUSCAMOS EL USUARIO PARA VERIFICAR QUE EXISTE EL CORREO ELECTRONICO
       const review = await Review.findReview(viaje, usuario)
-    
-      // SI NO EXISTE EL USUARIO
       if (!review) {
         return res.status(200).json({
           message: 'NO EXISTE REVIEW',
