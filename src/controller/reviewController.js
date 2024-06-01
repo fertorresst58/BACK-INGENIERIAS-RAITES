@@ -24,10 +24,7 @@ const review = async (req, res) => {
     try {
       const { viaje, usuario } = req.body
       
-      // BUSCAMOS EL USUARIO PARA VERIFICAR QUE EXISTE EL CORREO ELECTRONICO
       const review = await Review.findReview(viaje, usuario)
-    
-      // SI NO EXISTE EL USUARIO
       if (!review) {
         return res.status(200).json({
           message: 'NO EXISTE REVIEW',
@@ -50,4 +47,29 @@ const review = async (req, res) => {
     }
 }
 
-module.exports = { addNewReview, review }
+const findAllReviews = async (req, res) => {
+  try {
+      const { viaje } = req.body
+      const reviews = await Review.findAllReviews(viaje)
+      if (reviews.length === 0) {
+          return res.status(404).json({
+              message: 'NO SE ENCONTRARON RESEÑAS',
+              success: false
+          })
+      }
+      return res.status(200).json({
+          message: 'RESEÑAS ENCONTRADAS',
+          success: true,
+          reviews
+      })
+  } catch (error) {
+      console.log('ERROR =>', error)
+      res.status(500).json({
+          message: 'INTERNAL SERVER ERROR',
+          success: false,
+          error
+      })
+  }
+}
+
+module.exports = { addNewReview, review, findAllReviews }

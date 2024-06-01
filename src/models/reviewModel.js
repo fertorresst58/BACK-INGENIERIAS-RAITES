@@ -1,3 +1,4 @@
+const connection = require('../config/mysql')
 const con = require('../config/mysql')
 const IReview = require('../interfaces/IReview')
 const { query } = require('express')
@@ -36,8 +37,8 @@ class Review extends IReview{
 
 	static async findReview (viaje, usuario) {
 		try {
-      const query = 'SELECT * FROM resenas WHERE res_via_id = ? AND res_usu_id = ?'
-      const reviewDoc = await con.query(query, [viaje, usuario])
+			const query = 'SELECT * FROM resenas WHERE res_via_id = ? AND res_usu_id = ?'
+			const reviewDoc = await con.query(query, [viaje, usuario])
 
 			if (reviewDoc.length > 0) {
 				const newReview = new Review (
@@ -46,7 +47,7 @@ class Review extends IReview{
 					reviewDoc[0].res_usu_id,
 					reviewDoc[0].res_puntuacion,
 					reviewDoc[0].res_comentario,
-					reviewDoc[0].res_fecha,
+					reviewDoc[0].res_fecha
 				)
 				return newReview
 			} else {
@@ -57,6 +58,32 @@ class Review extends IReview{
 			return null;
 		}
 	}
+
+	static async findAllReviews(viaje) {
+        try {
+            const query = 'SELECT r.*, u.usu_nombre, u.usu_apaterno, u.usu_amaterno FROM resenas r JOIN publicar p ON r.res_via_id = p.pub_via_id JOIN usuarios u ON p.pub_usu_id = u.usu_id WHERE r.res_via_id = ?'
+            const reviewDocs = await connection.query(query, [viaje])
+            if (reviewDocs.length > 0) {
+                const reviews = reviewDocs.map(doc => ({
+                    id: doc.res_id,
+                    viaje: doc.res_via_id,
+                    usuario: doc.res_usu_id,
+                    puntuacion: doc.res_puntuacion,
+                    comentario: doc.res_comentario,
+                    fecha: doc.res_fecha,
+					nombre: doc.usu_nombre,
+                    apaterno: doc.usu_apaterno,
+                    amaterno: doc.usu_amaterno
+                }))
+                return reviews
+            } else {
+                return []
+            }
+        } catch (err) {
+            console.log('ERROR =>', err)
+            throw new Error('ERROR AL RECUPERAR LAS RESEÑAS')
+        }
+    }
 }
 
 module.exports = Review

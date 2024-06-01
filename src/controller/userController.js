@@ -46,6 +46,33 @@ const login = async (req, res) => {
   }
 }
 
+const findUserByViaje = async (req, res) => {
+  try {
+    const { viaje } = req.body
+    
+    const userDoc = await User.findUserByViaje(viaje)
+  
+    // SI NO EXISTE EL USUARIO
+    if (!userDoc) {
+      return res.status(404).json({
+        message: 'USUARIO NO ENCONTRADO',
+        success: false
+      })
+    }
+
+    res.status(200).json({ 
+      success: true,
+      user: userDoc
+    })
+  } catch (error) {
+    res.status(500).json({
+      message: 'INTERNAL SERVER ERROR',
+      success: false,
+      error
+    })
+  }
+}
+
 const logout = async (req, res) => {
   try {
     const token = req.headers.authorization
@@ -185,4 +212,4 @@ const signUp = async (req, res) => {
 //   }
 // }
 
-module.exports = { signUp, login, logout, user }
+module.exports = { signUp, login, logout, user, findUserByViaje }

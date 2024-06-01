@@ -84,6 +84,38 @@ class User extends IUser {
 		}
 	}
 
+	static async findUserByViaje (viaje) {
+		try {
+      const query = 'SELECT u.* FROM publicar p JOIN usuarios u ON p.pub_usu_id = u.usu_id WHERE p.pub_via_id = ?'
+      const userDoc = await con.query(query, [viaje])
+
+			if (userDoc.length > 0) {
+				const newUser = new User (
+					userDoc[0].usu_id,
+					userDoc[0].usu_nombre,
+					userDoc[0].usu_apaterno,
+					userDoc[0].usu_amaterno,
+					userDoc[0].usu_sexo,
+					userDoc[0].usu_email,
+					userDoc[0].usu_password,
+					userDoc[0].usu_telefono,
+					userDoc[0].usu_carrera,
+					userDoc[0].usu_fecha_nac,
+					userDoc[0].usu_des,
+					userDoc[0].usu_img,
+					userDoc[0].usu_ciudad,
+					userDoc[0].usu_campus
+				)
+				return newUser
+			}
+			return null
+		} 
+		catch(err) {
+			console.log('Error => ', err)
+			throw new Error('NO SE ENCONTRO AL USUARIO')
+		}
+	}
+
 	static async logoutUser(token, callback) {
 		// Verifica si el token es válido
 		try {
