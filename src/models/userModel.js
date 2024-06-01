@@ -21,12 +21,12 @@ class User extends IUser {
 		this.campus = campus
 	}
 
-	static async createUser(nombre, apaterno, amaterno, sexo, email, password, telefono, carrera, fechaNac) {
+	static async createUser(nombre, apaterno, amaterno, sexo, email, password, telefono, carrera, fechaNac, campus) {
 		try {
 			const hash = await bcrypt.hash(password, 10)
 			const query = 'INSERT INTO `usuarios` ' + 
-			'(usu_nombre, usu_apaterno, usu_amaterno, usu_sexo, usu_email, usu_password, usu_telefono, usu_carrera, usu_fecha_nac) ' + 
-			'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+			'(usu_nombre, usu_apaterno, usu_amaterno, usu_sexo, usu_email, usu_password, usu_telefono, usu_carrera, usu_fecha_nac, usu_campus) ' + 
+			'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
       		await con.query(query, [
 				nombre,
 				apaterno,
@@ -36,10 +36,11 @@ class User extends IUser {
 				hash,
 				telefono,
 				carrera,
-				fechaNac
+				fechaNac,
+				campus
 			])
 
-			return new User(nombre, apaterno, amaterno, sexo, email, password, telefono, carrera, fechaNac)
+			return new User(nombre, apaterno, amaterno, sexo, email, password, telefono, carrera, fechaNac, campus)
 		} 
 		catch (err) {
 			console.log('ERROR =>', err)

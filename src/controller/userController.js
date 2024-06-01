@@ -118,7 +118,7 @@ const user = async (req, res) => {
 
 const signUp = async (req, res) => {
   try {
-    const { nombre, apaterno, amaterno, sexo, email, password, telefono, carrera, fechaNac } = req.body
+    const { nombre, apaterno, amaterno, sexo, email, password, telefono, carrera, fechaNac, campus } = req.body
     
     const existingEmail = await User.findUser(email)
     if (existingEmail) {
@@ -128,7 +128,7 @@ const signUp = async (req, res) => {
       })
     }
 
-    const newUser = await User.createUser(nombre, apaterno, amaterno, sexo, email, password, telefono, carrera, fechaNac)
+    const newUser = await User.createUser(nombre, apaterno, amaterno, sexo, email, password, telefono, carrera, fechaNac, campus)
     res.status(201).json({
       message: 'USUARIO REGISTRADO SATISFACTORIAMENTE',
       success: true,
