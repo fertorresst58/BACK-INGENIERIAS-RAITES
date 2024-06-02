@@ -110,28 +110,13 @@ INSERT INTO viajes (via_descripcion, via_inicio, via_destino, via_fecha, via_hor
 ('Vacaciones de invierno', 'Ciudad S', 'Ciudad T', '2025-02-20', '22:00:00', 400.00);
 
 INSERT INTO reservar (res_usu_id, res_via_id) VALUES
-(1, 1), 
-(4, 2),  
-(8, 3), 
-(7, 4),  
-(9, 5),  
-(1, 6),  
-(5, 7),  
-(3, 8),  
-(8, 9), 
-(5, 10); 
+(11,7),
+(11, 2);
 
 INSERT INTO publicar (pub_usu_id, pub_via_id) VALUES
-(1, 1),
-(2, 2),
-(3, 3),
-(4, 4),
-(1, 5),
-(2, 6),
-(3, 7),
-(4, 8),
-(1, 9),
-(2, 10);
+(11, 3),
+(11,6),
+(11,9);
 
 INSERT INTO resenas (res_resenado, res_resenador, res_puntuacion, res_comentario, res_fecha) 
 VALUES 
