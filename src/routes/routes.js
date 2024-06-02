@@ -1,13 +1,16 @@
 const express = require('express')
 const router = express.Router()
-const { signUp, login, logout, user, findUserByViaje } = require('./../controller/userController')
+const { signUp, login, updateUser, user, findUserByViaje } = require('./../controller/userController')
 const { home, registrarViaje } = require('./../controller/viajesController')
 const { addNewReview, review, findAllReviews  } = require('./../controller/reviewController')
+
+// STRIPE
+const { checkout, success, cancel } = require('./../controller/stripeController')
 // const authenticateToken = require('./../auth/authMiddleware')
 
 // RUTAS DE AUTENTICACION IMPLEMENTADAS EN FRONT
 router.post('/login', login)
-router.post('logout', logout)
+router.put('/updateUser', updateUser)
 router.get('/user/:email', user)
 router.post('/user/findUserByViaje', findUserByViaje)
 
@@ -23,5 +26,10 @@ router.post('/registrarviaje', registrarViaje)
 router.post('/history', addNewReview)
 router.post('/history/findReview', review)
 router.post('/history/findAllReviews', findAllReviews) 
+
+// STRIPE
+router.post('/create-checkout-session', checkout)
+router.get('/success', success)
+router.get('/cancel', cancel)
 
 module.exports = router
