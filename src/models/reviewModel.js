@@ -61,7 +61,7 @@ class Review extends IReview{
 
 	static async findAllReviews(viaje) {
         try {
-            const query = 'SELECT r.*, u.usu_nombre, u.usu_apaterno, u.usu_amaterno FROM resenas r JOIN publicar p ON r.res_via_id = p.pub_via_id JOIN usuarios u ON p.pub_usu_id = u.usu_id WHERE r.res_via_id = ?'
+            const query = 'SELECT r.*, u.usu_nombre, u.usu_apaterno, u.usu_amaterno, u.usu_img FROM resenas r INNER JOIN usuarios u ON r.res_usu_id = u.usu_id WHERE r.res_via_id = ?;'
             const reviewDocs = await connection.query(query, [viaje])
             if (reviewDocs.length > 0) {
                 const reviews = reviewDocs.map(doc => ({
@@ -73,7 +73,8 @@ class Review extends IReview{
                     fecha: doc.res_fecha,
 					nombre: doc.usu_nombre,
                     apaterno: doc.usu_apaterno,
-                    amaterno: doc.usu_amaterno
+                    amaterno: doc.usu_amaterno,
+					imagen: doc.usu_img
                 }))
                 return reviews
             } else {
