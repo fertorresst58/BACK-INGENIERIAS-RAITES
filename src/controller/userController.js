@@ -169,47 +169,20 @@ const signUp = async (req, res) => {
   }
 }
 
-// const getAllUsers = async (req, res) => {
-//   try {
-//     const users = await User.getAllUser()
-//     res.json ({
-//       users,
-//       message: 'success'
-//     })
-//   } catch (error) {
-//     res.status(500).json({
-//       message: 'Internal Server Error',
-//       error: error
-//     })
-//   }
-// }
+const updateUser = async (req, res) => {
+  const { id, nombre, apaterno, amaterno, sexo, email, telefono, carrera, fecha_nac, des, img, ciudad, campus } = req.body
+  console.log("🚀 ~ updateUser ~ id:", id)
+  try {
+    const userUpdated = await User.updateUser( id, nombre, apaterno, amaterno, sexo, email, telefono, carrera, fecha_nac, des, img, ciudad, campus )
+    res.json({
+      userUpdated,
+      message: 'success'
+    })
+  } catch (error) {
+    res.status(500).json({
+      message: 'Internal Server Error'
+    })
+  }
+}
 
-// const deleteUser = async (req, res) => {
-//   const userEmail = req.params.email
-//   try {
-//     await User.deleteUser(userEmail)
-//     res.status(204).send()
-//   } catch (error) {
-//     res.status(500).json({
-//       message: 'Internal Server Error'
-//     })
-//   }
-// }
-
-// const updateUser = async (req, res) => {
-//   const userEmail = req.params.email
-//   const userData = req.body
-//   try {
-//     const userUpdated = await User.updateUser(userEmail, userData)
-//     res.json({
-//       userUpdated,
-//       message: 'success'
-//     })
-//   } catch (error) {
-//     res.status(500).json({
-//       message: 'Internal Server Error'
-//     })
-//   }
-// }
-
-module.exports = { signUp, login, logout, user, findUserByViaje }
+module.exports = { signUp, login, updateUser, user, findUserByViaje }
