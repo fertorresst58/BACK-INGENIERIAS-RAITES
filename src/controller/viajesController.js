@@ -1,6 +1,7 @@
 const viajes = require('../models/viajesModel')
 const publicar = require('../models/publicarModel')
 const reservar = require('../models/reservarModel')
+const User = require('../models/userModel')
 
 const home = async (req, res) => {
     arrayViajes = await viajes.allViajes()
@@ -58,16 +59,45 @@ const registrarViaje = async (req, res) => {
 const reservarViaje = async (req, res) => {
     try {
         const { idusuario, idviaje } = req.body
+        
+        const usuarioExistente = User.findUserPorID(idusuario)
+
+        if(!usuarioExistente) {
+            return res.status(404).json({
+                message: 'El usuario no existe',
+                success: false
+            })
+        }
+
+        const viaje = await viajes.findViajePorId(idviaje)
+        if(!viaje) {
+            return res.status(404).json({
+                message: 'El viaje no existe',
+                success: false
+            })
+        }
+
+        const existeReserva = await reservar.findReservar(idusuario, idviaje)
+        if(existeReserva) {
+            return res.status(404).json({
+                message: 'La reserva ya existe',
+                success: false
+            })
+        }
 
         const reserva = new reservar(idusuario, idviaje)
 
-        resultado = await reserva.createReservar()
+        let resultado = await reserva.createReservar()
 
         if(resultado) {
-            res.status(201).json({
-                message: 'VIAJE RESERVADO SATISFACTORIAMENTE',
-                success: true
-            })
+            resultado = viaje.actualizarDisponible()
+
+            if(resultado) {
+                res.status(201).json({
+                    message: 'VIAJE RESERVADO SATISFACTORIAMENTE',
+                    success: true
+                })
+            }
         }
     } catch (error) {
         res.status(500).json({

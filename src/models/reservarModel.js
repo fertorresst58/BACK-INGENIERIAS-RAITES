@@ -25,6 +25,25 @@ class reservar {
         }
     }
 
+    static async findReservar(idusuario, idviaje){
+        try {
+            const query = 'SELECT * FROM reservar WHERE res_usu_id = ? AND res_via_id = ?'
+
+            let resultado = await con.query(query, [idusuario, idviaje])
+            resultado = resultado[0]
+            if(resultado) {
+                const reserva = new reservar(resultado.res_usu_id,
+                                            resultado.res_via_id,
+                                            )
+                return reserva
+            } else {
+                return false
+            }
+        } catch (error) {
+            console.log('ERROR AL ENCONTRAR la reservacion =>', error);
+        }
+    }
+
 }
 
 module.exports = reservar

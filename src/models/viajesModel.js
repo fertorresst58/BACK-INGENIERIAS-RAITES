@@ -46,6 +46,25 @@ class viajes {
             console.log('ERROR =>', error)
         }
     }
+    async updateViaje() {
+        try {
+            const query = 'INSERT INTO viajes (via_descripcion, via_inicio, via_destino, via_fecha, via_hora, via_precio, via_capacidad, via_disponible) ' +
+            'VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
+
+            await con.query(query, [
+                this.descripcion,
+                this.inicio,
+                this.destino,
+                this.fecha,
+                this.hora,
+                this.precio,
+                this.capacidad,
+                this.disponible
+            ])
+        } catch (error) {
+            console.log('ERROR =>', error)
+        }
+    }
 
     async findViajeParaAsignar(){
         try {
@@ -57,6 +76,50 @@ class viajes {
 
         } catch (error) {
             console.log('ERROR AL ENCONTRAR EL VIAJE =>', error);
+        }
+    }
+
+    static async findViajePorId(id){
+        try {
+            const query = 'SELECT * FROM viajes WHERE via_id = ? LIMIT 1'
+
+            let resultado = await con.query(query, [id])
+            resultado = resultado[0]
+            
+            const viaje = new viajes(resultado.via_id,
+                                    resultado.via_descripcion,
+                                    resultado.via_inicio,
+                                    resultado.via_destino,
+                                    resultado.via_fecha,
+                                    resultado.via_hora,
+                                    resultado.via_precio,
+                                    resultado.via_capacidad,
+                                    resultado.via_disponible
+                                    )
+
+            return viaje
+        } catch (error) {
+            console.log('ERROR AL ENCONTRAR EL VIAJE =>', error);
+        }
+    }
+
+    async actualizarDisponible(){
+        try {
+            if(this.disponible == null){
+                this.disponible = 1
+            } else {
+                this.disponible += 1
+            }
+
+            const query = "UPDATE viajes SET via_disponible = ? WHERE via_id = ?"
+            
+            await con.query(query, [this.disponible, this.id])
+
+            return true
+
+        } catch (error) {
+            console.log('ERROR AL ACTUALIZAR EL VIAJE =>', error);
+            return false
         }
     }
 
