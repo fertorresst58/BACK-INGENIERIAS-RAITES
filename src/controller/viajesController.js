@@ -90,7 +90,7 @@ const reservarViaje = async (req, res) => {
         let resultado = await reserva.createReservar()
 
         if(resultado) {
-            resultado = viaje.actualizarDisponible()
+            resultado = viaje.actualizarCapacidad()
 
             if(resultado) {
                 res.status(201).json({
