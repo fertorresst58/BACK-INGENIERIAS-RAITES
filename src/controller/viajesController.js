@@ -58,7 +58,7 @@ const registrarViaje = async (req, res) => {
 
 const reservarViaje = async (req, res) => {
     try {
-        const { idusuario, idviaje } = req.body
+        const { idusuario, idviaje, reservado } = req.body
         
         const usuarioExistente = User.findUserPorID(idusuario)
 
@@ -87,7 +87,7 @@ const reservarViaje = async (req, res) => {
 
         const reserva = new reservar(idusuario, idviaje)
 
-        let resultado = await reserva.createReservar()
+        let resultado = await reserva.createReservar(reservado)
 
         if(resultado) {
             resultado = viaje.actualizarCapacidad()

@@ -103,13 +103,11 @@ class viajes {
         }
     }
 
-    async actualizarCapacidad(){
+    async actualizarCapacidad(reservado){
         try {
-            this.capacidad -= 1
-
             const query = "UPDATE viajes SET via_capacidad = ? WHERE via_id = ?"
             
-            await con.query(query, [this.capacidad, this.id])
+            await con.query(query, [reservado, this.id])
 
             return true
 
