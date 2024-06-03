@@ -1,3 +1,2 @@
-node_modules
-/src/config/serviceAccountKey.json
-/src/config/mysql.js
+# Dependencias de Node.js
+node_modules/
