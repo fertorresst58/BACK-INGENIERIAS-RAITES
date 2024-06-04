@@ -52,7 +52,7 @@ const findAllReviews = async (req, res) => {
       const { viaje } = req.body
       const reviews = await Review.findAllReviews(viaje)
       if (reviews.length === 0) {
-          return res.status(404).json({
+          return res.status(200).json({
               message: 'NO SE ENCONTRARON RESEÑAS',
               success: false
           })
