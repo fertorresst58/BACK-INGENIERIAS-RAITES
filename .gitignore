@@ -1,2 +1,2 @@
-node_modules
-/src/config/serviceAccountKey.json
+# Dependencias de Node.js
+node_modules/

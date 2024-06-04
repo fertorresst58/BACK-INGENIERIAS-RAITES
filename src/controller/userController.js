@@ -46,6 +46,33 @@ const login = async (req, res) => {
   }
 }
 
+const findUserByViaje = async (req, res) => {
+  try {
+    const { viaje } = req.body
+    
+    const userDoc = await User.findUserByViaje(viaje)
+  
+    // SI NO EXISTE EL USUARIO
+    if (!userDoc) {
+      return res.status(404).json({
+        message: 'USUARIO NO ENCONTRADO',
+        success: false
+      })
+    }
+
+    res.status(200).json({ 
+      success: true,
+      user: userDoc
+    })
+  } catch (error) {
+    res.status(500).json({
+      message: 'INTERNAL SERVER ERROR',
+      success: false,
+      error
+    })
+  }
+}
+
 const logout = async (req, res) => {
   try {
     const token = req.headers.authorization
@@ -118,7 +145,7 @@ const user = async (req, res) => {
 
 const signUp = async (req, res) => {
   try {
-    const { nombre, apaterno, amaterno, sexo, email, password, telefono, carrera, fechaNac } = req.body
+    const { nombre, apaterno, amaterno, sexo, email, password, telefono, carrera, fechaNac, campus } = req.body
     
     const existingEmail = await User.findUser(email)
     if (existingEmail) {
@@ -128,7 +155,7 @@ const signUp = async (req, res) => {
       })
     }
 
-    const newUser = await User.createUser(nombre, apaterno, amaterno, sexo, email, password, telefono, carrera, fechaNac)
+    const newUser = await User.createUser(nombre, apaterno, amaterno, sexo, email, password, telefono, carrera, fechaNac, campus)
     res.status(201).json({
       message: 'USUARIO REGISTRADO SATISFACTORIAMENTE',
       success: true,
@@ -142,47 +169,20 @@ const signUp = async (req, res) => {
   }
 }
 
-// const getAllUsers = async (req, res) => {
-//   try {
-//     const users = await User.getAllUser()
-//     res.json ({
-//       users,
-//       message: 'success'
-//     })
-//   } catch (error) {
-//     res.status(500).json({
-//       message: 'Internal Server Error',
-//       error: error
-//     })
-//   }
-// }
+const updateUser = async (req, res) => {
+  const { id, nombre, apaterno, amaterno, sexo, email, telefono, carrera, fecha_nac, des, img, ciudad, campus } = req.body
+  console.log("🚀 ~ updateUser ~ id:", id)
+  try {
+    const userUpdated = await User.updateUser( id, nombre, apaterno, amaterno, sexo, email, telefono, carrera, fecha_nac, des, img, ciudad, campus )
+    res.json({
+      userUpdated,
+      message: 'success'
+    })
+  } catch (error) {
+    res.status(500).json({
+      message: 'Internal Server Error'
+    })
+  }
+}
 
-// const deleteUser = async (req, res) => {
-//   const userEmail = req.params.email
-//   try {
-//     await User.deleteUser(userEmail)
-//     res.status(204).send()
-//   } catch (error) {
-//     res.status(500).json({
-//       message: 'Internal Server Error'
-//     })
-//   }
-// }
-
-// const updateUser = async (req, res) => {
-//   const userEmail = req.params.email
-//   const userData = req.body
-//   try {
-//     const userUpdated = await User.updateUser(userEmail, userData)
-//     res.json({
-//       userUpdated,
-//       message: 'success'
-//     })
-//   } catch (error) {
-//     res.status(500).json({
-//       message: 'Internal Server Error'
-//     })
-//   }
-// }
-
-module.exports = { signUp, login, logout, user }
+module.exports = { signUp, login, updateUser, user, findUserByViaje }
