@@ -1,7 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const { signUp, login, updateUser, user, findUserByViaje, existeCorreo } = require('./../controller/userController')
-
+const { signUp, login, updateUser, user, findUserByViaje, existeCorreo, updatePassword } = require('./../controller/userController')
 //const { signUp, login, logout, user, findUserByViaje, updateUser } = require('./../controller/userController')
 const { home, registrarViaje, reservarViaje } = require('./../controller/viajesController')
 const { addNewReview, review, findAllReviews  } = require('./../controller/reviewController')
@@ -15,6 +14,7 @@ router.post('/login', login)
 router.put('/updateUser', updateUser)
 router.get('/user/:email', user)
 router.get('/userfind/:email', existeCorreo)
+router.get('/updatePassword/:email/:password', updatePassword)
 router.post('/user/findUserByViaje', findUserByViaje)
 router.post('/signup', signUp)
 

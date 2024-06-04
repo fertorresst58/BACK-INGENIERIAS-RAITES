@@ -143,6 +143,43 @@ const user = async (req, res) => {
   }
 }
 
+const updatePassword = async (req, res) => {
+  try {
+    const email = req.params.email
+    const password = req.params.password
+    
+    // BUSCAMOS EL USUARIO PARA VERIFICAR QUE EXISTE EL CORREO ELECTRONICO
+    const user = await User.findUser(email)
+  
+    // SI NO EXISTE EL USUARIO
+    if (!user) {
+      return res.status(404).json({
+        message: 'USUARIO NO ENCONTRADO',
+        success: false
+      })
+    } 
+    
+    const cambiarcontrasena = await user.updatePassword(password)
+    if(!cambiarcontrasena) {
+      return res.status(401).json({
+        message: 'ERROR AL ACTUALIZAR LA CONTRASEÑA',
+        success: false
+      })
+    }
+    
+    return res.status(200).json({
+      message: 'USUARIO ACTUALIZADO',
+      success: true,
+    })
+  } catch (error) {
+    res.status(500).json({
+      message: 'INTERNAL SERVER ERROR',
+      success: false,
+      error
+    })
+  }
+}
+
 const existeCorreo = async (req, res) => {
   try {
     const email = req.params.email
@@ -214,4 +251,4 @@ const updateUser = async (req, res) => {
   }
 }
 
-module.exports = { signUp, login, updateUser, user, findUserByViaje, existeCorreo }
+module.exports = { signUp, login, updateUser, user, findUserByViaje, existeCorreo, updatePassword }
