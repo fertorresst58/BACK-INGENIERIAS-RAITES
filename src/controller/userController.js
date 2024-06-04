@@ -106,7 +106,6 @@ const logout = async (req, res) => {
 }
 
 const user = async (req, res) => {
-  console.log("🚀 ~ user ~ req:", req)
   try {
     const email = req.params.email
     
@@ -117,14 +116,6 @@ const user = async (req, res) => {
     if (!user) {
       return res.status(404).json({
         message: 'USUARIO NO ENCONTRADO',
-        success: false
-      })
-    } 
-    
-    const isValidPass = await user.verifyPassword(password)
-    if(!isValidPass) {
-      return res.status(401).json({
-        message: 'CREDENCIALES INVALIDAS',
         success: false
       })
     }

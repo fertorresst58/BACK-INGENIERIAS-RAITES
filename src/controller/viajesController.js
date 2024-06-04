@@ -87,10 +87,10 @@ const reservarViaje = async (req, res) => {
 
         const reserva = new reservar(idusuario, idviaje)
 
-        let resultado = await reserva.createReservar(reservado)
+        let resultado = await reserva.createReservar()
 
         if(resultado) {
-            resultado = viaje.actualizarCapacidad()
+            resultado = await viaje.actualizarCapacidad(reservado)
 
             if(resultado) {
                 res.status(201).json({
