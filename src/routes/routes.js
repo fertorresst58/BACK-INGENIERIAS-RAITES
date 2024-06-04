@@ -1,7 +1,6 @@
 const express = require('express')
 const router = express.Router()
 const { signUp, login, updateUser, user, findUserByViaje, existeCorreo, updatePassword } = require('./../controller/userController')
-//const { signUp, login, logout, user, findUserByViaje, updateUser } = require('./../controller/userController')
 const { home, registrarViaje, reservarViaje } = require('./../controller/viajesController')
 const { addNewReview, review, findAllReviews  } = require('./../controller/reviewController')
 
