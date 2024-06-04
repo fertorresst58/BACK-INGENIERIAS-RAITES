@@ -48,6 +48,21 @@ class User extends IUser {
 		}
 	}
 
+	async updatePassword(password) {
+		try {
+			const hash = await bcrypt.hash(password, 10)
+			const query = "UPDATE usuarios SET usu_password = ? WHERE usu_id = ?"
+
+			await con.query(query, [hash, this.id])
+
+			return true
+			
+		} catch (error) {
+			console.log('Error al actualizar contraseña => ', err)
+			return false
+		}
+	}
+
 	async verifyPassword (password) {
 		return await bcrypt.compare(password, this.password)
 	}
