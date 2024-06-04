@@ -1,8 +1,8 @@
 -- Crear la base de datos
-CREATE DATABASE IF NOT EXISTS raitesUG;
+CREATE DATABASE IF NOT EXISTS raitesug;
 
 -- Usar la base de datos
-USE raitesUG;
+USE raitesug;
 
 -- Tabla de usuarios
 CREATE TABLE IF NOT EXISTS usuarios (
@@ -10,12 +10,16 @@ CREATE TABLE IF NOT EXISTS usuarios (
     usu_nombre VARCHAR(100),
     usu_apaterno VARCHAR(100),
     usu_amaterno VARCHAR(100),
-    usu_sexo ENUM('Masculino', 'Femenino', 'Otro'),
+    usu_sexo ENUM('Hombre', 'Mujer', 'Prefiero no decirlo', 'Otro'),
     usu_email VARCHAR(100),
     usu_password VARCHAR(100),
     usu_telefono VARCHAR(20),
-    usu_carrera VARCHAR(30),
+    usu_carrera VARCHAR(150),
     usu_fecha_nac DATE,
+    usu_des TINYTEXT,
+    usu_img VARCHAR(400),
+    usu_ciudad VARCHAR(30),
+    usu_campus VARCHAR(30),
     PRIMARY KEY (usu_id),
     UNIQUE (usu_email)
 );
@@ -29,6 +33,8 @@ CREATE TABLE IF NOT EXISTS viajes (
     via_fecha DATE NOT NULL,
     via_hora TIME NOT NULL,
     via_precio DECIMAL(10, 2) NOT NULL,
+    via_capacidad INT NOT NULL,
+    via_disponible BOOL NOT NULL,
     PRIMARY KEY (via_id)
 );
 
@@ -67,47 +73,48 @@ CREATE TABLE IF NOT EXISTS publicar (
 
 CREATE TABLE IF NOT EXISTS resenas (
 	res_id INT NOT NULL AUTO_INCREMENT,
-	res_resenado INT NOT NULL,
-    res_resenador INT NOT NULL,
+	res_via_id INT NOT NULL,
+    res_usu_id INT NOT NULL,
     res_puntuacion INT NOT NULL,
     res_comentario TEXT,
     res_fecha DATE,
     PRIMARY KEY(res_id),
-		CONSTRAINT fk_resenado_resenas
-			FOREIGN KEY (res_resenado)
+		CONSTRAINT fk_usuarios_resenas
+			FOREIGN KEY (res_usu_id)
             REFERENCES usuarios(usu_id)
             ON DELETE CASCADE
             ON UPDATE CASCADE,
-		CONSTRAINT fk_resenador_resenas
-			FOREIGN KEY (res_resenador)
-            REFERENCES usuarios(usu_id)
+		CONSTRAINT fk_viajes_resenas
+			FOREIGN KEY (res_via_id)
+            REFERENCES viajes(via_id)
             ON DELETE CASCADE
             ON UPDATE CASCADE
 );
 
 INSERT INTO usuarios (usu_nombre, usu_sexo, usu_email, usu_password, usu_telefono, usu_carrera) VALUES
-('Juan Perez', 'Masculino', 'juan@example.com', 'password1', '1234567890', 'Ingeniería Informática'),
-('María García', 'Femenino', 'maria@example.com', 'password2', '0987654321', 'Medicina'),
-('Alejandro Lopez', 'Masculino', 'alejandro@example.com', 'password3', '5551234567', 'Derecho'),
-('Ana Martínez', 'Femenino', 'ana@example.com', 'password4', '777888999', 'Administración de Empresas'),
-('Pedro Rodríguez', 'Masculino', 'pedro@example.com', 'password5', '3216549870', 'Arquitectura'),
-('Sofía Hernández', 'Femenino', 'sofia@example.com', 'password6', '666999888', 'Psicología'),
-('Diego Gómez', 'Masculino', 'diego@example.com', 'password7', '111222333', 'Biología'),
-('Laura Díaz', 'Femenino', 'laura@example.com', 'password8', '777000111', 'Química'),
-('Carlos Ruiz', 'Masculino', 'carlos@example.com', 'password9', '444555666', 'Economía'),
-('Luisa Sánchez', 'Femenino', 'luisa@example.com', 'password10', '222333444', 'Historia');
+('Juan Perez', 'Hombre', 'juan@example.com', 'password1', '1234567890', 'Ingeniería Informática'),
+('María García', 'Mujer', 'maria@example.com', 'password2', '0987654321', 'Medicina'),
+('Alejandro Lopez', 'Hombre', 'alejandro@example.com', 'password3', '5551234567', 'Derecho'),
+('Ana Martínez', 'Mujer', 'ana@example.com', 'password4', '777888999', 'Administración de Empresas'),
+('Pedro Rodríguez', 'Hombre', 'pedro@example.com', 'password5', '3216549870', 'Arquitectura'),
+('Sofía Hernández', 'Mujer', 'sofia@example.com', 'password6', '666999888', 'Psicología'),
+('Diego Gómez', 'Hombre', 'diego@example.com', 'password7', '111222333', 'Biología'),
+('Laura Díaz', 'Mujer', 'laura@example.com', 'password8', '777000111', 'Química'),
+('Carlos Ruiz', 'Hombre', 'carlos@example.com', 'password9', '444555666', 'Economía'),
+('Luisa Sánchez', 'Mujer', 'luisa@example.com', 'password10', '222333444', 'Historia'),
+('admin', 'Hombre', 'admin@ugto.mx', '$2b$10$N8Bv5Vd0Uqv6ljQ4k5zO6u3yEK1IQnibGwjI/a67EWnCf6tqLcGxq', '1111111111', 'Historia');
 
-INSERT INTO viajes (via_descripcion, via_inicio, via_destino, via_fecha, via_hora, via_precio) VALUES
-('Viaje de negocios', 'Ciudad A', 'Ciudad B', '2024-05-01', '08:00:00', 150.00),
-('Vacaciones en la playa', 'Ciudad C', 'Ciudad D', '2024-06-10', '10:30:00', 300.00),
-('Excursión de montaña', 'Ciudad E', 'Ciudad F', '2024-07-15', '09:00:00', 200.00),
-('Tour cultural', 'Ciudad G', 'Ciudad H', '2024-08-20', '11:00:00', 100.00),
-('Viaje de aventura', 'Ciudad I', 'Ciudad J', '2024-09-25', '12:30:00', 250.00),
-('Escapada de fin de semana', 'Ciudad K', 'Ciudad L', '2024-10-30', '14:00:00', 180.00),
-('Tour gastronómico', 'Ciudad M', 'Ciudad N', '2024-11-05', '16:00:00', 120.00),
-('Viaje de relajación', 'Ciudad O', 'Ciudad P', '2024-12-10', '18:30:00', 350.00),
-('Excursión cultural', 'Ciudad Q', 'Ciudad R', '2025-01-15', '20:00:00', 180.00),
-('Vacaciones de invierno', 'Ciudad S', 'Ciudad T', '2025-02-20', '22:00:00', 400.00);
+INSERT INTO viajes (via_descripcion, via_inicio, via_destino, via_fecha, via_hora, via_precio, via_capacidad, via_disponible) VALUES
+('Viaje de negocios', 'Ciudad A', 'Ciudad B', '2024-05-01', '08:00:00', 150.00, 5, true),
+('Vacaciones en la playa', 'Ciudad C', 'Ciudad D', '2024-06-10', '10:30:00', 300.00, 5, true),
+('Excursión de montaña', 'Ciudad E', 'Ciudad F', '2024-07-15', '09:00:00', 200.00, 5, true),
+('Tour cultural', 'Ciudad G', 'Ciudad H', '2024-08-20', '11:00:00', 100.00, 5, true),
+('Viaje de aventura', 'Ciudad I', 'Ciudad J', '2024-09-25', '12:30:00', 250.00, 5, true),
+('Escapada de fin de semana', 'Ciudad K', 'Ciudad L', '2024-10-30', '14:00:00', 180.00, 5, true),
+('Tour gastronómico', 'Ciudad M', 'Ciudad N', '2024-11-05', '16:00:00', 120.00, 5, true),
+('Viaje de relajación', 'Ciudad O', 'Ciudad P', '2024-12-10', '18:30:00', 350.00, 5, true),
+('Excursión cultural', 'Ciudad Q', 'Ciudad R', '2025-01-15', '20:00:00', 180.00, 5, true),
+('Vacaciones de invierno', 'Ciudad S', 'Ciudad T', '2025-02-20', '22:00:00', 400.00, 5, true);
 
 INSERT INTO reservar (res_usu_id, res_via_id) VALUES
 (1, 1), 
@@ -116,10 +123,10 @@ INSERT INTO reservar (res_usu_id, res_via_id) VALUES
 (7, 4),  
 (9, 5),  
 (1, 6),  
-(5, 7),  
-(3, 8),  
-(8, 9), 
-(5, 10); 
+(11, 7),  
+(11, 8),  
+(11, 9), 
+(11, 10); 
 
 INSERT INTO publicar (pub_usu_id, pub_via_id) VALUES
 (1, 1),
@@ -133,7 +140,7 @@ INSERT INTO publicar (pub_usu_id, pub_via_id) VALUES
 (1, 9),
 (2, 10);
 
-INSERT INTO resenas (res_resenado, res_resenador, res_puntuacion, res_comentario, res_fecha) 
+INSERT INTO resenas (res_via_id, res_usu_id, res_puntuacion, res_comentario, res_fecha) 
 VALUES 
 (1, 2, 4, 'Buen servicio, lo recomendaría.', '2024-04-25'),
 (1, 3, 3, 'Regular, podría mejorar.', '2024-04-24'),
@@ -146,4 +153,29 @@ VALUES
 (5, 2, 2, 'No cumplió con mis expectativas.', '2024-04-17'),
 (5, 1, 3, 'Podría mejorar la atención al cliente.', '2024-04-16');
 
+INSERT INTO viajes (via_descripcion, via_inicio, via_destino, via_fecha, via_hora, via_precio, via_capacidad, via_disponible)
+VALUES ('Desc1', 'Ini1' ,'Des1', '2023-06-09', '10:00:00', '166.66', 5, true),
+('Desc2', 'Ini2' ,'Des2', '2024-05-28', '05:00:00', '266.66', 5, true),
+('Desc3', 'Ini3' ,'Des3', '2024-02-19', '14:00:00', '366.66', 5, true);
 
+INSERT INTO reservar (res_usu_id, res_via_id)
+VALUES (11, 11), (11, 12), (11, 13);
+
+INSERT INTO publicar (pub_usu_id, pub_via_id) VALUES
+(7, 11),
+(3, 12),
+(5, 13);
+
+DELETE FROM viajes WHERE via_id = 14;
+
+INSERT INTO viajes (via_descripcion, via_inicio, via_destino, via_fecha, via_hora, via_precio, via_capacidad, via_disponible)
+VALUES ('PruebaFiltro', 'IniF' ,'DesF', '2024-03-11', '10:00:00', '466.66', 5, true);
+
+INSERT INTO publicar (pub_usu_id, pub_via_id) VALUES
+(2, 16);
+
+SELECT r.*, u.usu_nombre, u.usu_apaterno, u.usu_amaterno, u.usu_img FROM resenas r INNER JOIN usuarios u ON r.res_usu_id = u.usu_id WHERE r.res_via_id = 2;
+    
+SELECT r.*, u.usu_nombre, u.usu_apaterno, u.usu_amaterno FROM resenas r JOIN publicar p ON r.res_via_id = p.pub_via_id JOIN usuarios u ON p.pub_usu_id = u.usu_id WHERE r.res_via_id = 2;
+
+UPDATE usuarios SET usu_img = 'https://cdn-icons-png.flaticon.com/512/6326/6326055.png' WHERE usu_id = 11;
