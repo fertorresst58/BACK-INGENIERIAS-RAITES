@@ -63,8 +63,8 @@ class User extends IUser {
 		}
 	}
 
-	async verifyPassword (password) {
-		return await bcrypt.compare(password, this.password)
+	static async verifyPassword (password, passwordDB) {
+		return await bcrypt.compare(password, passwordDB)
 	}
 
 	static async findUser (email) {

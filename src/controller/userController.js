@@ -18,7 +18,7 @@ const login = async (req, res) => {
     }
 
     // VERIFICAMOS SI EL PASSWORD ES CORRECTO
-    const isValidPass = await userDoc.verifyPassword(password)
+    const isValidPass = await User.verifyPassword(password, userDoc.password)
     if(!isValidPass) {
       return res.status(401).json({
         message: 'CREDENCIALES INVALIDAS',
