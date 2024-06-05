@@ -13,7 +13,7 @@ router.post('/login', login)
 router.put('/updateUser', updateUser)
 router.get('/user/:email', user)
 router.get('/userfind/:email', existeCorreo)
-router.get('/updatePassword/:email/:password', updatePassword)
+router.put('/updatePassword', updatePassword)
 router.post('/user/findUserByViaje', findUserByViaje)
 router.post('/signup', signUp)
 

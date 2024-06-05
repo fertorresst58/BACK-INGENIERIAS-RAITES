@@ -25,8 +25,8 @@ class User extends IUser {
 		try {
 			const hash = await bcrypt.hash(password, 10)
 			const query = 'INSERT INTO `usuarios` ' + 
-			'(usu_nombre, usu_apaterno, usu_amaterno, usu_sexo, usu_email, usu_password, usu_telefono, usu_carrera, usu_fecha_nac, usu_campus) ' + 
-			'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+			'(usu_nombre, usu_apaterno, usu_amaterno, usu_sexo, usu_email, usu_password, usu_telefono, usu_carrera, usu_fecha_nac, usu_campus, usu_img) ' + 
+			'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
       		await con.query(query, [
 				nombre,
 				apaterno,
@@ -37,7 +37,8 @@ class User extends IUser {
 				telefono,
 				carrera,
 				fechaNac,
-				campus
+				campus,
+				'https://cdn-icons-png.flaticon.com/512/6326/6326055.png'
 			])
 
 			return new User(nombre, apaterno, amaterno, sexo, email, password, telefono, carrera, fechaNac, campus)

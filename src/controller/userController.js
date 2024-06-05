@@ -136,8 +136,8 @@ const user = async (req, res) => {
 
 const updatePassword = async (req, res) => {
   try {
-    const email = req.params.email
-    const password = req.params.password
+    const email = req.body.email
+    const password = req.body.password
     
     // BUSCAMOS EL USUARIO PARA VERIFICAR QUE EXISTE EL CORREO ELECTRONICO
     const user = await User.findUser(email)
